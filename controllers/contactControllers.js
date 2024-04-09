@@ -38,12 +38,19 @@ const updateContact = asyncHandler(async(req, res) => {
         throw new Error("Contact not found!");
     }
     
-    const updateContact = await Contact.findByIdAndUpdate(req.params.id ,{...req.body}, {new: true});
+    const updatedContact = await Contact.findByIdAndUpdate(req.params.id ,{...req.body}, {new: true});
     res.status(200).json(updatedContact);
 });
 
 const deleteContact = asyncHandler(async(req, res) => {
-    res.status(200).json({  message: `Delete contact for ${req.params.id}` });
+    const contact = await Contact.findById(req.params.id);
+    if(!contact){
+        return res.status(404);
+        throw new Error("Contact not found!");
+    }
+    
+    await Contact.remove();
+    res.status(200).json(contact);
 });
 
 module.exports = {getContact, getOneContact, createContact, updateContact, deleteContact}; 
