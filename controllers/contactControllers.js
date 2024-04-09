@@ -19,7 +19,9 @@ const createContact = asyncHandler(async(req, res) => {
         throw  new Error("Please provide name, email, country code and phone number");
     }
 
-    res.status(200).json({  message: "Create contact" });
+    const contact = await Contact.create({name, email, countryCode, number});
+    
+    res.status(201).json(contact);
 });
 
 const updateContact = asyncHandler(async(req, res) => {
